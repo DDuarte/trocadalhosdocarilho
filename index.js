@@ -39,7 +39,11 @@ const getSaying = (id1, id2, cb) => {
     }, (err, docs) => {
         if (err) throw err;
 
-        console.log("docs", id1);
+        if (docs[0].id != id1) {
+            const copy = docs[0];
+            docs[0] = docs[1];
+            docs[1] = copy;
+        }
 
         const part1 = getHalves(docs[0].text)[0];
         const part2 = getHalves(docs[1].text)[1];
