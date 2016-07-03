@@ -29,6 +29,37 @@ const getHalves = (str) => {
     }
 };
 
+const getSaying = (id1, id2, cb) => {
+    db.find({
+        $or: [{
+            id: parseInt(id1)
+        }, {
+            id: parseInt(id2)
+        }]
+    }, (err, docs) => {
+        if (err) throw err;
+
+        console.log("docs", id1);
+
+        const part1 = getHalves(docs[0].text)[0];
+        const part2 = getHalves(docs[1].text)[1];
+
+        console.log('"' + docs[0].text + '" + "' + docs[1].text +
+            '" = "' + part1 + '" + "' + part2 + '"');
+
+        cb({
+            part1: {
+                text: part1,
+                id: docs[0].id
+            },
+            part2: {
+                text: part2,
+                id: docs[1].id
+            }
+        });
+    });
+};
+
 const getRandomSaying = (cb) => {
     db.count({}, (err, count) => {
         if (err) throw err;
@@ -39,25 +70,9 @@ const getRandomSaying = (cb) => {
             rand2 = random(0, count);
         } while (rand1 == rand2);
 
-        db.find({
-            $or: [{
-                id: rand1
-            }, {
-                id: rand2
-            }]
-        }, (err, docs) => {
-            if (err) throw err;
-
-            const part1 = getHalves(docs[0].text)[0];
-            const part2 = getHalves(docs[1].text)[1];
-
-            console.log('"' + docs[0].text + '" + "' + docs[1].text +
-                '" = "' + part1 + '" + "' + part2 + '"');
-
-            cb(part1, part2);
-        });
+        getSaying(rand1, rand2, cb);
     });
-}
+};
 
 const buildDb = () => {
     return new Promise((fullfill, reject) => {
@@ -111,12 +126,16 @@ buildDb().then((count) => {
             method: 'GET',
             path: '/',
             handler: (request, reply) => {
-                getRandomSaying((part1, part2) => {
-                    reply.view('index', {
-                        part1: part1,
-                        part2: part2
-                    })
-                });
+                if (request.query.id1 && request.query.id2) {
+                    getSaying(request.query.id1, request.query.id2, parts => {
+                        reply.view('index', parts);
+                    });
+                } else {
+                    getRandomSaying(parts => {
+                        parts.first = true;
+                        reply.view('index', parts);
+                    });
+                }
             }
         });
 
@@ -124,8 +143,8 @@ buildDb().then((count) => {
             method: 'GET',
             path: '/rand',
             handler: (request, reply) => {
-                getRandomSaying((part1, part2) => {
-                    reply({ part1: part1, part2: part2 });
+                getRandomSaying(parts => {
+                    reply(parts);
                 });
             }
         });

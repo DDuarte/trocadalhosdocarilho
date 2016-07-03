@@ -121,12 +121,30 @@
             xhttp.onreadystatechange = function() {
                 if (xhttp.readyState == 4 && xhttp.status == 200) {
                     var json = JSON.parse(xhttp.responseText);
-                    document.getElementById("part1").innerHTML = json.part1;
-                    document.getElementById("part2").innerHTML = json.part2;
+                    document.getElementById("part1").innerHTML = json.part1.text;
+                    document.getElementById("part2").innerHTML = json.part2.text;
+                    window.parts = json;
                 }
             };
             xhttp.open("GET", "/rand", true);
             xhttp.send();
+        }
+
+        {{#if first}} 
+        window.parts = {
+            part1: {
+                id: {{part1.id}},
+                text: "{{part1.text}}"
+            },
+            part2: {
+                id: {{part2.id}},
+                text: "{{part2.text}}"
+            }
+        };
+        {{/if}}
+
+        function link() {
+            window.history.pushState({ }, "", "/?id1=" + window.parts.part1.id + "&id2=" + window.parts.part2.id);
         }
     </script>
 </head>
@@ -137,12 +155,13 @@
     </div>
 
     <div id="header">
-        <h1 id="part1">{{part1}}</h1>
-        <h1 id="part2">{{part2}}</h1>
+        <h1 id="part1">{{part1.text}}</h1>
+        <h1 id="part2">{{part2.text}}</h1>
     </div>
 
     <div id="refresh">
-        <a href="#" class="button style2" onclick="reload()">Outro fachabor</a>
+        <button class="button style2" onclick="reload()">Outro fachabor</button>
+        <button class="button" onclick="link()"># Link</button>
     </div>
 </body>
 
