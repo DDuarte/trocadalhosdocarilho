@@ -5,8 +5,8 @@
     <title>Trocadalhos do Carilho</title>
     <meta charset="utf-8">
     <meta property="og:locale" content="pt_PT">
-    <meta property="og:title" content="{{part1.text}} {{part2.text}}">
-    <meta property="og:site_name" content="Trocadalhos do Carilho">
+    <meta property="og:description" content="{{part1.text}} {{part2.text}}">
+    <meta property="og:title" content="Trocadalhos do Carilho">
     <meta property="og:image" content="http://trocadalhosdocarilho.westeurope.cloudapp.azure.com/images/bg.jpg">
     <meta property="og:image:type" content="image/jpeg">
     <meta property="og:image:width" content="1440">
@@ -133,6 +133,7 @@
                     document.getElementById("part1").innerHTML = json.part1.text;
                     document.getElementById("part2").innerHTML = json.part2.text;
                     window.parts = json;
+                    link();
                 }
             };
             xhttp.open("GET", "/rand", true);
@@ -150,11 +151,19 @@
                 text: "{{part2.text}}"
             }
         };
+        link();
         {{/if}}
 
         function link() {
-            window.history.pushState({ }, "", "/?id1=" + window.parts.part1.id + "&id2=" + window.parts.part2.id);
+            window.history.pushState({ parts: window.parts }, "", "/?id1=" + window.parts.part1.id + "&id2=" + window.parts.part2.id);
         }
+
+        window.onpopstate = function (e) {
+            if (e.state && e.state.parts) {
+                document.getElementById("part1").innerHTML = e.state.parts.part1.text;
+                document.getElementById("part2").innerHTML = e.state.parts.part2.text;
+            }
+        };
     </script>
 </head>
 
@@ -170,7 +179,7 @@
 
     <div id="refresh">
         <button class="button style2" onclick="reload()">Outro fachabor</button>
-        <button class="button" onclick="link()"># Link</button>
+        <!-- <button class="button" onclick="link()"># Link</button> -->
     </div>
 </body>
 
