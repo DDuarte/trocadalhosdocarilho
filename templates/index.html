@@ -1,0 +1,71 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>Trocadalhos do Carilho</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link href="https://fonts.googleapis.com/css?family=Galada|Open+Sans:700" rel="stylesheet">
+        <link rel="icon" href="images/favicon.png">
+        <!-- <script src="https://use.fontawesome.com/ed33c5ebff.js"></script> -->
+        <style>
+            html { 
+                background: linear-gradient(
+                    rgba(0, 0, 0, 0.2), 
+                    rgba(0, 0, 0, 0.2)
+                ), url(images/bg.jpg) no-repeat center center fixed; 
+                -webkit-background-size: cover;
+                -moz-background-size: cover;
+                -o-background-size: cover;
+                background-size: cover;
+            }
+            
+            #title {
+                text-align: left;
+                font-family: 'Galada', sans-serif;
+                position:fixed;
+                top:0;
+                left:0;
+                margin:0;
+                width:100%;
+                background-color: #222;
+            }
+            
+            #title > h1 {
+                margin: 0 0 0 0.5em;
+                color: #F9F9F9;
+            }
+
+            #header {
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                -webkit-transform: translate(-50%, -50%);
+                transform: translate(-50%, -50%);
+                background-color: rgba(10, 10, 10, 0.5);
+                padding: 0.5em 1.5em 0.5em 1.5em;
+                text-align: center;
+                border-radius: 10px;
+                border-style: dashed;
+                border-width: 1px;
+                color: #EEE;
+            }
+            
+            #header > h1 {
+                font-family: 'Galada', cursive;
+                font-weight: 400;
+                font-size: 4em;
+                margin: 0;
+            }
+        </style>
+	</head>
+	<body>
+        <div id="title">
+            <h1>Trocadalhos do Carilho</h1>
+        </div>
+
+        <div id="header">
+            <h1 id="part1">{{part1}}</h1>
+            <h1 id="part2">{{part2}}</h1>
+        </div>
+	</body>
+</html>
